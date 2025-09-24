@@ -4,7 +4,7 @@ import random
 import time
 
 # -------------------------
-# Sentiment analysis setup
+# Setup
 # -------------------------
 sentiment_classifier = pipeline(
     "sentiment-analysis",
@@ -12,7 +12,7 @@ sentiment_classifier = pipeline(
 )
 
 def analyze_sentiment(text):
-    """Analyze sentiment of a single text and return label and score."""
+    """Analyze sentiment and return label and score."""
     return sentiment_classifier(text)[0]
 
 # -------------------------
