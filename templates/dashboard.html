@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real-Time Marketing Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Real-Time Marketing Engagement Dashboard</h1>
+
+    <canvas id="likesChart" width="400" height="200"></canvas>
+    <canvas id="commentsChart" width="400" height="200"></canvas>
+
+    <script>
+        async function updateDashboard() {
+            const response = await fetch('/metrics');
+            const data = await response.json();
+
+            const postIds = Object.keys(data);
+            const likes = postIds.map(id => data[id].likes);
+            const comments = postIds.map(id => data[id].comments);
+
+            // Likes Chart
+            const ctxLikes = document.getElementById('likesChart').getContext('2d');
+            if (window.likesChartInstance) window.likesChartInstance.destroy();
+            window.likesChartInstance = new Chart(ctxLikes, {
+                type: 'bar',
+                data: { labels: postIds, datasets: [{ label: 'Likes', data: likes }] },
+                options: { responsive: true }
+            });
+
+            // Comments Chart
+            const ctxComments = document.getElementById('commentsChart').getContext('2d');
+            if (window.commentsChartInstance) window.commentsChartInstance.destroy();
+            window.commentsChartInstance = new Chart(ctxComments, {
+                type: 'bar',
+                data: { labels: postIds, datasets: [{ label: 'Comments', data: comments }] },
+                options: { responsive: true }
+            });
+        }
+
+        setInterval(updateDashboard, 2000); // refresh every 2 seconds
+        updateDashboard();
+    </script>
+</body>
+</html>
+
